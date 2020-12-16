@@ -2,20 +2,8 @@
 
 > Teaching python editor
 
-## Build Setup
+### Teaching对接说明
 
-``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+1. 解压覆盖升级包
+2. 数据字典的作业类型（work_type）新增Python，值为4
+3. 配置菜单，新增Python菜单 （仿照scratch）

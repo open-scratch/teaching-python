@@ -1,8 +1,46 @@
 <template>
   <div>
     <a-layout>
-      <a-layout-header>
-        欢迎使用Python在线编辑器
+      <a-layout-header style="padding: 0; height: 50px">
+        <!-- 控制按钮 -->
+        <a-menu mode="horizontal" style="color: black; height: 100%">
+          <a-sub-menu>
+            <span slot="title" class="submenu-title-wrapper">
+              <a-icon type="file" />文件
+            </span>
+            <a-menu-item-group>
+              <a-menu-item key="setting:1">
+                <a type="primary" @click="openFile">打开</a>
+              </a-menu-item>
+              <a-menu-item key="setting:2">
+                <a type="primary" @click="saveFile">保存</a>
+              </a-menu-item>
+            </a-menu-item-group>
+          </a-sub-menu>
+
+          <a-menu-item>
+            <a-input
+              v-model="projectName"
+              placeholder="请输入项目名称"
+              style="width: 200px"
+            ></a-input>
+          </a-menu-item>
+          <a-menu-item>
+            <a-button type="primary" @click="submitCode">提交</a-button>
+          </a-menu-item>
+
+          <a-menu-item>
+            <a-button type="primary" @click="runit"
+              ><a-icon type="play-circle" />运行</a-button
+            >
+          </a-menu-item>
+          <a-menu-item>
+            <a-button type="primary" @click="clear"
+              ><a-icon type="delete" />清空</a-button
+            >
+          </a-menu-item>
+        </a-menu>
+        <input type="file" id="fileinput" style="display: none" />
       </a-layout-header>
       <a-layout>
         <a-layout-content>
@@ -17,15 +55,6 @@
           </a-form-item>
         </a-layout-content>
         <a-layout-sider :collapsible="false" :width="500" :theme="'light'">
-          <!-- 控制按钮 -->
-          <div class="control">
-            <input type="file" id="fileinput" style="display: none" />
-            <a-button type="primary" @click="runit">运行</a-button>
-            <a-button type="primary" @click="clear">清空</a-button>
-            <a-button type="primary" @click="openFile">打开</a-button>
-            <a-button type="primary" @click="saveFile">下载</a-button>
-            <a-button type="primary" @click="submitCode">提交</a-button>
-          </div>
           <!-- 画布 -->
           <div id="mycanvas"></div>
           <!-- 代码输出 -->
@@ -56,14 +85,26 @@ export default {
     return {
       code: "",
       out: "",
+      projectName: "",
     };
   },
   mounted() {},
   created() {
+    var that = this
+    //载入网络项目
     var url = this.urlParam("url");
     if (url) {
       this.downloadFile(url);
+    } else {
+      this.downloadFile("./static/defaultPython.py");
     }
+    //兼容载入项目事件
+     window.document.addEventListener('loadPorject', function(e) {
+       console.log("load project:"+e.detail.projectName);
+       console.log(e.detail.url);
+       that.projectName = e.detail.projectName
+       that.downloadFile(e.detail.url)
+    });
   },
   methods: {
     runit() {
@@ -105,14 +146,21 @@ export default {
       fileInput.click();
     },
     saveFile() {
-      var n = new File([this.code], "python项目.py", {
-        type: "text/plain;charset=utf-8",
-      });
+      var n = new File(
+        [this.code],
+        (this.projectName ? this.projectName : "未命名") + ".py",
+        {
+          type: "text/plain;charset=utf-8",
+        }
+      );
       saveAs(n);
     },
     submitCode() {
+      if (this.code == "") {
+        that.$message.info("没有代码可以提交");
+      }
       if (window.submitCode) {
-        window.submitCode(this.code);
+        window.submitCode(this.projectName, this.code);
       }
     },
     setCode(code) {
@@ -171,14 +219,14 @@ export default {
 }
 .control {
   margin: 10px;
-  button{
+  button {
     margin: 10px 0;
   }
 }
-.ant-layout-header{
-  background: #dfefff;
+.ant-layout-header {
+  background: #dfefff !important;
 }
-.ant-layout-sider{
+.ant-layout-sider {
   padding: 10px;
 }
 </style>

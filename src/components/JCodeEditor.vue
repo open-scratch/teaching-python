@@ -355,10 +355,10 @@ export default {
       });
 
       //自动提示
-      this.coder.on("keyHandled", (e) => {
-        console.log(e);
-        this.coder.showHint();
-      });
+      // this.coder.on("keyHandled", (e) => {
+      //   console.log(e);
+      //   this.coder.showHint();
+      // });
     },
     getCodeContent() {
       return this.code;
