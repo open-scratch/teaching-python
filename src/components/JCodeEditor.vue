@@ -46,7 +46,7 @@ import "codemirror/lib/codemirror.css";
 // 引入主题后还需要在 options 中指定主题才会生效 darcula  gruvbox-dark hopscotch  monokai
 // import "codemirror/theme/panda-syntax.css";
 
-import "codemirror/theme/idea.css"
+import "codemirror/theme/monokai.css"
 //提示css
 import "codemirror/addon/hint/show-hint.css";
 
@@ -81,6 +81,11 @@ export default {
     value: {
       type: String,
       default: "",
+    },
+    //是否只读，nocursor禁止获取焦点
+    readOnly:{
+      type: [Boolean, String],
+      default: false
     },
     // 外部传入的语法类型
     language: {
@@ -139,11 +144,12 @@ export default {
       // 默认配置
       matchBrackets: true,
       options: {
+        readOnly: this.readOnly,
         // 缩进格式
         tabSize: 2,
         // 主题，对应主题库 JS 需要提前引入
         // theme: "panda-syntax",
-        theme: "idea",
+        theme: "monokai",
         line: true,
         extraKeys: {'Ctrl': 'autocomplete'},//自定义快捷键
         hintOptions: {
@@ -264,23 +270,25 @@ export default {
     // coder 配置
     coderOptions() {
       return {
+        readOnly: this.options.readOnly,
         tabSize: this.options.tabSize,
         theme: this.options.theme,
         lineNumbers: this.lineNumbers,
         line: true,
+        extraKeys: this.options.extraKeys,
         hintOptions: this.options.hintOptions,
       };
     },
     isAutoHeight() {
       let { autoHeight } = this;
-      if (
-        typeof autoHeight === "string" &&
-        autoHeight.toLowerCase().trim() === "!ie"
-      ) {
-        // autoHeight = !(isIE() || isIE11())
-      } else {
-        autoHeight = true;
-      }
+      // if (
+      //   typeof autoHeight === "string" &&
+      //   autoHeight.toLowerCase().trim() === "!ie"
+      // ) {
+      //   autoHeight = !(isIE() || isIE11())
+      // } else {
+      //   autoHeight = true;
+      // }
       return autoHeight;
     },
     fullScreenParentProps() {
@@ -347,7 +355,8 @@ export default {
       });
 
       //自动提示
-      this.coder.on("keypress", () => {
+      this.coder.on("keyHandled", (e) => {
+        console.log(e);
         this.coder.showHint();
       });
     },
@@ -478,8 +487,8 @@ export default {
     position: fixed;
     top: 10px;
     left: 10px;
-    width: calc(100% - 20px);
-    height: calc(100% - 20px);
+    width: calc(100% - 0px);
+    height: calc(100% - 0px);
     padding: 10px;
     background-color: #f5f5f5;
 
@@ -501,8 +510,8 @@ export default {
 
   &.auto-height {
     .full-screen-child {
-      min-height: 120px;
-      max-height: 320px;
+      min-height: 200px;
+      max-height: 100%;
       height: unset;
       overflow: hidden;
     }

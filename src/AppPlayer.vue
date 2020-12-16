@@ -1,19 +1,19 @@
 <template>
-  <div id="app">
-    <PythonEditor />
+  <div id="player">
+    <PythonPlayer />
   </div>
 </template>
 
 <script>
-import PythonEditor from "./components/PythonEditor";
+import PythonPlayer from "./components/PythonPlayer";
 
 export default {
-  name: "App",
+  name: "AppPlayer",
   data() {
     return {};
   },
   components: {
-    PythonEditor,
+    PythonPlayer,
   },
 };
 </script>

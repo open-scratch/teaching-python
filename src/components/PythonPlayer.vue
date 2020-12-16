@@ -1,39 +1,26 @@
 <template>
   <div>
-    <a-layout>
-      <a-layout-header>
-        欢迎使用Python在线编辑器
-      </a-layout-header>
-      <a-layout>
-        <a-layout-content>
-          <a-form-item>
-            <JCodeEditor
-              language="python"
-              v-model="code"
-              :fullScreen="true"
-              placeholder="请输入代码"
-              ref="codeEditor"
-            />
-          </a-form-item>
-        </a-layout-content>
-        <a-layout-sider :collapsible="false" :width="500" :theme="'light'">
-          <!-- 控制按钮 -->
-          <div class="control">
-            <input type="file" id="fileinput" style="display: none" />
-            <a-button type="primary" @click="runit">运行</a-button>
-            <a-button type="primary" @click="clear">清空</a-button>
-            <a-button type="primary" @click="openFile">打开</a-button>
-            <a-button type="primary" @click="saveFile">下载</a-button>
-            <a-button type="primary" @click="submitCode">提交</a-button>
-          </div>
-          <!-- 画布 -->
-          <div id="mycanvas"></div>
-          <!-- 代码输出 -->
-          <pre id="output">{{ out }}</pre>
-        </a-layout-sider>
-      </a-layout>
-      <!-- <a-layout-footer></a-layout-footer> -->
-    </a-layout>
+    <!-- 控制按钮 -->
+    <div class="control">
+      <input type="file" id="fileinput" style="display: none" />
+      <a-button type="primary" @click="runit">运行</a-button>
+      <a-button type="primary" @click="clear">清空</a-button>
+    </div>
+    <!-- 画布 -->
+    <div id="mycanvas"></div>
+    <!-- 代码输出 -->
+    <pre id="output">{{ out }}</pre>
+
+    <a-form-item>
+      <JCodeEditor
+        language="python"
+        v-model="code"
+        :readOnly="'nocursor'"
+        :autoHeight="false"
+        :height="'20rem'"
+        ref="codeEditor"
+      />
+    </a-form-item>
   </div>
 </template>
 
@@ -58,12 +45,14 @@ export default {
       out: "",
     };
   },
-  mounted() {},
-  created() {
+  mounted() {
     var url = this.urlParam("url");
     if (url) {
       this.downloadFile(url);
     }
+  },
+  created() {
+    
   },
   methods: {
     runit() {
@@ -80,6 +69,7 @@ export default {
           that.$message.success("执行完毕");
         },
         function (err) {
+          console.log(err);
           that.$message.error(err.toString());
         }
       );
@@ -152,13 +142,13 @@ export default {
 .CodeMirror {
   /* Set height, width, borders, and global font properties here */
   font-family: monospace;
-  height: calc(100vh - 64px) !important;
+  // height: calc(100vh) !important;
   color: black;
   direction: ltr;
 }
 #output {
   border: 1px solid black;
-  height: 40vh;
+  height: 10rem;
   width: 100%;
   padding: 10px;
   margin: 10px 0;
