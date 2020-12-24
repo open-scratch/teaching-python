@@ -1,6 +1,6 @@
 <template>
   <div id="player">
-    <PythonPlayer />
+    <PythonPlayer editorType="ace"/>
   </div>
 </template>
 

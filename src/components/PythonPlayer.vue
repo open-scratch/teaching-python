@@ -10,14 +10,22 @@
     <div id="mycanvas"></div>
     <!-- 代码输出 -->
     <pre id="output">{{ out }}</pre>
-
     <a-form-item>
       <JCodeEditor
+        v-if="editorType == 'codemirror'"
         language="python"
         v-model="code"
-        :readOnly="'nocursor'"
-        :autoHeight="false"
-        :height="'20rem'"
+        :fullScreen="true"
+        readOnly="true"
+        placeholder="请输入代码"
+        ref="codeEditor"
+      />
+      <AceEditor
+        v-if="editorType == 'ace'"
+        language="python"
+        v-model="code"
+        readOnly="true"
+        :height="500"
         ref="codeEditor"
       />
     </a-form-item>
@@ -27,6 +35,7 @@
 <script>
 import { saveAs } from "file-saver";
 import JCodeEditor from "./JCodeEditor";
+import AceEditor from "./AceEditor";
 import "../python/skulpt.min.js";
 import "../python/skulpt-stdlib.js";
 
@@ -38,6 +47,13 @@ export default {
   name: "PythonEditor",
   components: {
     JCodeEditor,
+    AceEditor,
+  },
+  props: {
+    editorType: {
+      type: String,
+      default: "ace", //ace codemirror
+    },
   },
   data() {
     return {
@@ -51,9 +67,7 @@ export default {
       this.downloadFile(url);
     }
   },
-  created() {
-    
-  },
+  created() {},
   methods: {
     runit() {
       var that = this;
@@ -161,14 +175,14 @@ export default {
 }
 .control {
   margin: 10px;
-  button{
+  button {
     margin: 10px 0;
   }
 }
-.ant-layout-header{
+.ant-layout-header {
   background: #dfefff;
 }
-.ant-layout-sider{
+.ant-layout-sider {
   padding: 10px;
 }
 </style>

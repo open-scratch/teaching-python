@@ -46,10 +46,18 @@
         <a-layout-content>
           <a-form-item>
             <JCodeEditor
+              v-if="editorType == 'codemirror'"
               language="python"
               v-model="code"
               :fullScreen="true"
               placeholder="请输入代码"
+              ref="codeEditor"
+            />
+            <AceEditor
+              v-if="editorType == 'ace'"
+              language="python"
+              v-model="code"
+              :height="'calc(100vh - 74px)'"
               ref="codeEditor"
             />
           </a-form-item>
@@ -69,6 +77,7 @@
 <script>
 import { saveAs } from "file-saver";
 import JCodeEditor from "./JCodeEditor";
+import AceEditor from "./AceEditor";
 import "../python/skulpt.min.js";
 import "../python/skulpt-stdlib.js";
 
@@ -80,6 +89,13 @@ export default {
   name: "PythonEditor",
   components: {
     JCodeEditor,
+    AceEditor,
+  },
+  props: {
+    editorType: {
+      type: String,
+      default: "ace", //ace codemirror
+    },
   },
   data() {
     return {
@@ -90,7 +106,7 @@ export default {
   },
   mounted() {},
   created() {
-    var that = this
+    var that = this;
     //载入网络项目
     var url = this.urlParam("url");
     if (url) {
@@ -99,11 +115,11 @@ export default {
       this.downloadFile("./static/defaultPython.py");
     }
     //兼容载入项目事件
-     window.document.addEventListener('loadPorject', function(e) {
-       console.log("load project:"+e.detail.projectName);
-       console.log(e.detail.url);
-       that.projectName = e.detail.projectName
-       that.downloadFile(e.detail.url)
+    window.document.addEventListener("loadPorject", function (e) {
+      console.log("load project:" + e.detail.projectName);
+      console.log(e.detail.url);
+      that.projectName = e.detail.projectName;
+      that.downloadFile(e.detail.url);
     });
   },
   methods: {
@@ -111,10 +127,10 @@ export default {
       var that = this;
       this.clear();
       Sk.pre = "output";
-      Sk.configure({ output: that.outf, read: that.builtinRead });
+      Sk.configure({ output: that.terminalOut, read: that.builtinRead });
       (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = "mycanvas";
       var myPromise = Sk.misceval.asyncToPromise(function () {
-        return Sk.importMainWithBody("<stdin>", false, that.code, true);
+        return Sk.importMainWithBody("<stdin>", false, that.getCode(), true);
       });
       myPromise.then(
         function (mod) {
@@ -167,11 +183,15 @@ export default {
       this.code = code;
       this.$refs.codeEditor.setCodeContent(code);
     },
+    getCode() {
+      this.code = this.$refs.codeEditor.getCodeContent();
+      return this.code;
+    },
     clear() {
       document.getElementById("output").innerHTML = "";
       document.getElementById("mycanvas").innerHTML = "";
     },
-    outf(v) {
+    terminalOut(v) {
       var mypre = document.getElementById("output");
       mypre.innerHTML = mypre.innerHTML + v;
     },
@@ -200,7 +220,7 @@ export default {
 .CodeMirror {
   /* Set height, width, borders, and global font properties here */
   font-family: monospace;
-  height: calc(100vh - 64px) !important;
+  height: calc(100vh - 74px) !important;
   color: black;
   direction: ltr;
 }

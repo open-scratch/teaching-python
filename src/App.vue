@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <PythonEditor />
+    <PythonEditor editorType="ace"/>
   </div>
 </template>
 
