@@ -39,6 +39,13 @@
               ><a-icon type="delete" />清空</a-button
             >
           </a-menu-item>
+          <a-menu-item style="float: right">
+            <div class="right-menu">
+              <a-input :value="courseName" disabled=""></a-input>
+              <img :src="avatar" alt="">
+              <span>{{username}}</span>
+            </div>
+          </a-menu-item>
         </a-menu>
         <input type="file" id="fileinput" style="display: none" />
       </a-layout-header>
@@ -102,6 +109,9 @@ export default {
       code: "",
       out: "",
       projectName: "",
+      courseName: "自由创作",
+      username: "未登录",
+      avatar: "./static/avatar.png"
     };
   },
   mounted() {},
@@ -116,10 +126,18 @@ export default {
     }
     //兼容载入项目事件
     window.document.addEventListener("loadPorject", function (e) {
-      console.log("load project:" + e.detail.projectName);
-      console.log(e.detail.url);
+      console.log("load project:");
+      console.log(e.detail);
       that.projectName = e.detail.projectName;
+      that.courseName = e.detail.courseName;
       that.downloadFile(e.detail.url);
+    });
+    window.document.addEventListener("setUserInfo", function(e){
+      console.log("set user info:");
+      console.log(e.detail);
+      that.username = e.detail.username;
+      if(e.detail.avatar)
+        that.avatar = e.detail.avatar;
     });
   },
   methods: {
@@ -248,5 +266,17 @@ export default {
 }
 .ant-layout-sider {
   padding: 10px;
+}
+.right-menu {
+  // float: right;
+  padding: 5px 10px;
+  input{
+    width: 200px;
+    margin-right: 20px;
+  }
+  img{
+    height: 30px;
+    width: auto;
+  }
 }
 </style>

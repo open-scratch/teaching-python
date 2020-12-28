@@ -1,17 +1,46 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>teaching-python</title>
-    <script>
-      window.submitCode = function(code){
-        console.log(code);
-      }
-    </script>
-  </head>
-  <body>
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
-  </body>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>teaching-python</title>
+  <script>
+    window.submitCode = function (code) {
+      console.log(code);
+    }
+
+    function loadPorject() {
+      var myEvent = new CustomEvent('loadPorject', {
+        detail: {
+          projectName: info.workName,
+          courseName: "自由创作",
+          language: typeLanguages[info.workType],
+          url: info.workFileUrl
+        }
+      });
+      setTimeout(() => {
+        window.document.dispatchEvent(myEvent);
+      }, 500)
+    }
+
+    function setUserInfo() {
+      var myEvent = new CustomEvent('setUserInfo', {
+        detail: {
+          username: "未登录",
+          avatar: "./static/avatar.png",
+        }
+      });
+      setTimeout(() => {
+        window.document.dispatchEvent(myEvent);
+      }, 500)
+    }
+  </script>
+</head>
+
+<body>
+  <div id="app"></div>
+  <!-- built files will be auto injected -->
+</body>
+
 </html>
