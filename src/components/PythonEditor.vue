@@ -194,7 +194,7 @@ export default {
         that.$message.info("没有代码可以提交");
       }
       if (window.submitCode) {
-        window.submitCode(this.projectName, this.code);
+        window.submitCode(this.projectName, this.getCode());
       }
     },
     setCode(code) {

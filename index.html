@@ -6,16 +6,19 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>teaching-python</title>
   <script>
-    window.submitCode = function (code) {
+    //GET传参：
+    // url：文件地址
+    // 
+    window.submitCode = function (name, code) {
+      console.log(name);
       console.log(code);
     }
 
     function loadPorject() {
       var myEvent = new CustomEvent('loadPorject', {
         detail: {
-          projectName: info.workName,
+          projectName: "自由创作",
           courseName: "自由创作",
-          language: typeLanguages[info.workType],
           url: info.workFileUrl
         }
       });
