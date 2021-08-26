@@ -26,6 +26,9 @@
             ></a-input>
           </a-menu-item>
           <a-menu-item>
+            <a-button type="primary" @click="saveCode">仅保存</a-button>
+          </a-menu-item>
+          <a-menu-item>
             <a-button type="primary" @click="submitCode">提交</a-button>
           </a-menu-item>
 
@@ -189,9 +192,17 @@ export default {
       );
       saveAs(n);
     },
+    saveCode() {
+      if (this.code == "") {
+        this.$message.info("没有代码可以保存");
+      }
+      if (window.saveCode) {
+        window.saveCode(this.projectName, this.getCode());
+      }
+    },
     submitCode() {
       if (this.code == "") {
-        that.$message.info("没有代码可以提交");
+        this.$message.info("没有代码可以提交");
       }
       if (window.submitCode) {
         window.submitCode(this.projectName, this.getCode());
