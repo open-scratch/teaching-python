@@ -31,22 +31,16 @@
           <a-menu-item>
             <a-button type="primary" @click="submitCode">提交</a-button>
           </a-menu-item>
-
           <a-menu-item>
-            <a-button type="primary" @click="runit"
-              ><a-icon type="play-circle" />运行</a-button
-            >
+            <a-button type="primary" @click="runit"><a-icon type="play-circle"/>运行</a-button>
           </a-menu-item>
           <a-menu-item>
-            <a-button type="primary" @click="clear"
-              ><a-icon type="delete" />清空</a-button
-            >
+            <a-button type="primary" @click="clear"><a-icon type="delete"/>清空</a-button>
           </a-menu-item>
-          <a-menu-item style="float: right">
+          <a-menu-item style="float: right" v-if="username">
             <div class="right-menu">
-              <a-input :value="courseName" disabled=""></a-input>
-              <img :src="avatar" alt="">
-              <span>{{username}}</span>
+              <img :src="avatar" alt="" />
+              <span>{{ username }}</span>
             </div>
           </a-menu-item>
         </a-menu>
@@ -112,9 +106,8 @@ export default {
       code: "",
       out: "",
       projectName: "",
-      courseName: "自由创作",
-      username: "未登录",
-      avatar: "./static/avatar.png"
+      username: "",
+      avatar: "./static/avatar.png",
     };
   },
   mounted() {},
@@ -132,15 +125,13 @@ export default {
       console.log("load project:");
       console.log(e.detail);
       that.projectName = e.detail.projectName;
-      that.courseName = e.detail.courseName;
       that.downloadFile(e.detail.url);
     });
-    window.document.addEventListener("setUserInfo", function(e){
+    window.document.addEventListener("setUserInfo", function (e) {
       console.log("set user info:");
       console.log(e.detail);
       that.username = e.detail.username;
-      if(e.detail.avatar)
-        that.avatar = e.detail.avatar;
+      if (e.detail.avatar) that.avatar = e.detail.avatar;
     });
   },
   methods: {
@@ -281,11 +272,11 @@ export default {
 .right-menu {
   // float: right;
   padding: 5px 10px;
-  input{
+  input {
     width: 200px;
     margin-right: 20px;
   }
-  img{
+  img {
     height: 30px;
     width: auto;
   }
