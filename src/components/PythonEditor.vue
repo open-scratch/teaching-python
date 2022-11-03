@@ -26,9 +26,6 @@
             ></a-input>
           </a-menu-item>
           <a-menu-item>
-            <a-button type="primary" @click="saveCode">仅保存</a-button>
-          </a-menu-item>
-          <a-menu-item>
             <a-button type="primary" @click="submitCode">提交</a-button>
           </a-menu-item>
           <a-menu-item>
@@ -36,6 +33,9 @@
           </a-menu-item>
           <a-menu-item>
             <a-button type="primary" @click="clear"><a-icon type="delete"/>清空</a-button>
+          </a-menu-item>
+          <a-menu-item>
+            <a-button type="default" @click="toHome">返回</a-button>
           </a-menu-item>
           <a-menu-item style="float: right" v-if="username">
             <div class="right-menu">
@@ -183,14 +183,6 @@ export default {
       );
       saveAs(n);
     },
-    saveCode() {
-      if (this.code == "") {
-        this.$message.info("没有代码可以保存");
-      }
-      if (window.saveCode) {
-        window.saveCode(this.projectName, this.getCode());
-      }
-    },
     submitCode() {
       if (this.code == "") {
         this.$message.info("没有代码可以提交");
@@ -232,6 +224,9 @@ export default {
       }
       return results[1] || 0;
     },
+    toHome(){
+      window.location.href='/account/center'
+    }
   },
 };
 </script>
